@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title>Water treatment in urban environments: A guide for the implementation and scaling of nature-based solutions - Examples from South/Southeast Asia</title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet-svg-shape-markers.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/Countries_2.js"></script>
+        <script src="data/Labels_3.js"></script>
+        <script src="data/ExistingNbSProjects_4.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#01ffee',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#01ffee',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:10, minZoom:1
+        }).fitBounds([[-1.642090032440552,65.03067224870296],[30.299138339955068,135.23897449518623]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleHybrid_0');
+        map.getPane('pane_GoogleHybrid_0').style.zIndex = 400;
+        var layer_GoogleHybrid_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleHybrid_0',
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            minZoom: 1,
+            maxZoom: 10,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_GoogleHybrid_0;
+        map.addLayer(layer_GoogleHybrid_0);
+        map.createPane('pane_GoogleSatellite_1');
+        map.getPane('pane_GoogleSatellite_1').style.zIndex = 401;
+        var layer_GoogleSatellite_1 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleSatellite_1',
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            minZoom: 1,
+            maxZoom: 10,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_GoogleSatellite_1;
+        map.addLayer(layer_GoogleSatellite_1);
+        function pop_Countries_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['iso3'] !== null ? autolinker.link(feature.properties['iso3'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['color_code'] !== null ? autolinker.link(feature.properties['color_code'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['continent'] !== null ? autolinker.link(feature.properties['continent'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['region'] !== null ? autolinker.link(feature.properties['region'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['iso_3166_1'] !== null ? autolinker.link(feature.properties['iso_3166_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Countries_2_0() {
+            return {
+                pane: 'pane_Countries_2',
+                opacity: 1,
+                color: 'rgba(178,223,138,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Countries_2');
+        map.getPane('pane_Countries_2').style.zIndex = 402;
+        map.getPane('pane_Countries_2').style['mix-blend-mode'] = 'normal';
+        var layer_Countries_2 = new L.geoJson(json_Countries_2, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Countries_2',
+            layerName: 'layer_Countries_2',
+            pane: 'pane_Countries_2',
+            onEachFeature: pop_Countries_2,
+            style: style_Countries_2_0,
+        });
+        bounds_group.addLayer(layer_Countries_2);
+        map.addLayer(layer_Countries_2);
+        function pop_Labels_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Type'] !== null ? autolinker.link(feature.properties['Type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Labels_3_0() {
+            return {
+                pane: 'pane_Labels_3',
+                radius: 0.4,
+                opacity: 1,
+                color: 'rgba(255,230,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Labels_3');
+        map.getPane('pane_Labels_3').style.zIndex = 403;
+        map.getPane('pane_Labels_3').style['mix-blend-mode'] = 'normal';
+        var layer_Labels_3 = new L.geoJson(json_Labels_3, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Labels_3',
+            layerName: 'layer_Labels_3',
+            pane: 'pane_Labels_3',
+            onEachFeature: pop_Labels_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_Labels_3_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Labels_3);
+        map.addLayer(layer_Labels_3);
+        function pop_ExistingNbSProjects_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Name_Demo_'] !== null ? autolinker.link(feature.properties['Name_Demo_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Images'] !== null ? '<img src="images/' + String(feature.properties['Images']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Country</th>\
+                        <td>' + (feature.properties['Country'] !== null ? autolinker.link(feature.properties['Country'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Type of NbS</th>\
+                        <td>' + (feature.properties['Type'] !== null ? autolinker.link(feature.properties['Type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['Address'] !== null ? autolinker.link(feature.properties['Address'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Coordinates</th>\
+                        <td>' + (feature.properties['Lat_Lon'] !== null ? autolinker.link(feature.properties['Lat_Lon'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Implementing Agency</th>\
+                        <td>' + (feature.properties['Implementi'] !== null ? autolinker.link(feature.properties['Implementi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Date established</th>\
+                        <td>' + (feature.properties['Date_estab'] !== null ? autolinker.link(feature.properties['Date_estab'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Status</th>\
+                        <td>' + (feature.properties['Status'] !== null ? autolinker.link(feature.properties['Status'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Status_Det'] !== null ? autolinker.link(feature.properties['Status_Det'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Overview/Background</th>\
+                        <td>' + (feature.properties['Overview'] !== null ? autolinker.link(feature.properties['Overview'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Design</th>\
+                        <td>' + (feature.properties['Design'] !== null ? autolinker.link(feature.properties['Design'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Performance</th>\
+                        <td>' + (feature.properties['Performanc'] !== null ? autolinker.link(feature.properties['Performanc'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Contacts</th>\
+                        <td>' + (feature.properties['Contacts'] !== null ? autolinker.link(feature.properties['Contacts'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['gx_media_l'] !== null ? autolinker.link(feature.properties['gx_media_l'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ExistingNbSProjects_4_0() {
+            return {
+                pane: 'pane_ExistingNbSProjects_4',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(255,230,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,16,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_ExistingNbSProjects_4');
+        map.getPane('pane_ExistingNbSProjects_4').style.zIndex = 404;
+        map.getPane('pane_ExistingNbSProjects_4').style['mix-blend-mode'] = 'normal';
+        var layer_ExistingNbSProjects_4 = new L.geoJson(json_ExistingNbSProjects_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ExistingNbSProjects_4',
+            layerName: 'layer_ExistingNbSProjects_4',
+            pane: 'pane_ExistingNbSProjects_4',
+            onEachFeature: pop_ExistingNbSProjects_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_ExistingNbSProjects_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_ExistingNbSProjects_4);
+        map.addLayer(layer_ExistingNbSProjects_4);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>Water treatment in urban environments: A guide for the implementation and scaling of nature-based solutions - Examples from South/Southeast Asia</h2>';
+            };
+            title.addTo(map);
+            var abstract = new L.Control({'position':'bottomleft'});
+            abstract.onAdd = function (map) {
+                this._div = L.DomUtil.create('div',
+                'leaflet-control abstract');
+                this._div.id = 'abstract'
+                    this._div.setAttribute("onmouseenter", "abstract.show()");
+                    this._div.setAttribute("onmouseleave", "abstract.hide()");
+                    this.hide();
+                    return this._div;
+                };
+                abstract.hide = function () {
+                    this._div.classList.remove("abstractUncollapsed");
+                    this._div.classList.add("abstract");
+                    this._div.innerHTML = 'i'
+                }
+                abstract.show = function () {
+                    this._div.classList.remove("abstract");
+                    this._div.classList.add("abstractUncollapsed");
+                    this._div.innerHTML = 'This map is discussed in the (proposed) book entitled "Water treatment in urban environments: A guide for the implementation and scaling of nature-based solutions - Examples from South/Southeast Asia" under Chapter 2: Mapping existing NbS for water treatment in the Philippines, Sri Lanka and Vietnam.';
+            };
+            abstract.addTo(map);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/ExistingNbSProjects_4.png" /> Existing NbS Projects': layer_ExistingNbSProjects_4,'<img src="legend/Labels_3.png" /> Labels': layer_Labels_3,'<img src="legend/Countries_2.png" /> Countries': layer_Countries_2,"Google Satellite": layer_GoogleSatellite_1,"Google Hybrid": layer_GoogleHybrid_0,}).addTo(map);
+        setBounds();
+        var i = 0;
+        layer_Labels_3.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['Type'] !== null?String('<div style="color: #ffffff; font-size: 10pt; font-family: \'Calibri\', sans-serif;">' + layer.feature.properties['Type']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Labels_3'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"Type": "str","Status": "str","Name_Demo_": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+        var i = 0;
+        layer_Labels_3.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['Type'] !== null?String('<div style="color: #ffffff; font-size: 10pt; font-family: \'Calibri\', sans-serif;">' + layer.feature.properties['Type']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Labels_3'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Type = document.createElement('div');
+            div_Type.id = "div_Type";
+            div_Type.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Type);
+            sel_Type = document.createElement('select');
+            sel_Type.multiple = true;
+            sel_Type.size = 8;
+            sel_Type.id = "sel_Type";
+            var Type_options_str = "<option value='' unselected></option>";
+            sel_Type.onchange = function(){filterFunc()};
+            Type_options_str  += '<option value="Constructed Floating Wetland">Constructed Floating Wetland</option>';
+            Type_options_str  += '<option value="Constructed wetland">Constructed wetland</option>';
+            Type_options_str  += '<option value="DEWATS">DEWATS</option>';
+            Type_options_str  += '<option value="Green Roof">Green Roof</option>';
+            Type_options_str  += '<option value="Maturation pond">Maturation pond</option>';
+            Type_options_str  += '<option value="Odour Control by Biofilters">Odour Control by Biofilters</option>';
+            Type_options_str  += '<option value="Septage Treatment Facility">Septage Treatment Facility</option>';
+            Type_options_str  += '<option value="Sludge Management Strategy">Sludge Management Strategy</option>';
+            sel_Type.innerHTML = Type_options_str;
+            div_Type.appendChild(sel_Type);
+            var lab_Type = document.createElement('div');
+            lab_Type.innerHTML = 'Type';
+            lab_Type.className = 'filterlabel';
+            div_Type.appendChild(lab_Type);
+            var reset_Type = document.createElement('div');
+            reset_Type.innerHTML = 'clear filter';
+            reset_Type.className = 'filterlabel';
+            reset_Type.onclick = function() {
+                var options = document.getElementById("sel_Type").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Type.appendChild(reset_Type);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Status = document.createElement('div');
+            div_Status.id = "div_Status";
+            div_Status.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Status);
+            sel_Status = document.createElement('select');
+            sel_Status.multiple = true;
+            sel_Status.size = 8;
+            sel_Status.id = "sel_Status";
+            var Status_options_str = "<option value='' unselected></option>";
+            sel_Status.onchange = function(){filterFunc()};
+            Status_options_str  += '<option value="ND">ND</option>';
+            Status_options_str  += '<option value="No data">No data</option>';
+            Status_options_str  += '<option value="Non-functional">Non-functional</option>';
+            Status_options_str  += '<option value="Not fully operational">Not fully operational</option>';
+            Status_options_str  += '<option value="Not yet operational">Not yet operational</option>';
+            Status_options_str  += '<option value="On-Going Construction">On-Going Construction</option>';
+            Status_options_str  += '<option value="Operational">Operational</option>';
+            Status_options_str  += '<option value="Operational with retrofitting">Operational with retrofitting</option>';
+            sel_Status.innerHTML = Status_options_str;
+            div_Status.appendChild(sel_Status);
+            var lab_Status = document.createElement('div');
+            lab_Status.innerHTML = 'Status';
+            lab_Status.className = 'filterlabel';
+            div_Status.appendChild(lab_Status);
+            var reset_Status = document.createElement('div');
+            reset_Status.innerHTML = 'clear filter';
+            reset_Status.className = 'filterlabel';
+            reset_Status.onclick = function() {
+                var options = document.getElementById("sel_Status").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Status.appendChild(reset_Status);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Name_Demo_ = document.createElement('div');
+            div_Name_Demo_.id = "div_Name_Demo_";
+            div_Name_Demo_.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Name_Demo_);
+            sel_Name_Demo_ = document.createElement('select');
+            sel_Name_Demo_.multiple = true;
+            sel_Name_Demo_.size = 10;
+            sel_Name_Demo_.id = "sel_Name_Demo_";
+            var Name_Demo__options_str = "<option value='' unselected></option>";
+            sel_Name_Demo_.onchange = function(){filterFunc()};
+            Name_Demo__options_str  += '<option value="AVP Dressing Plant">AVP Dressing Plant</option>';
+            Name_Demo__options_str  += '<option value="Agoo Municipality Slaughterhouse">Agoo Municipality Slaughterhouse</option>';
+            Name_Demo__options_str  += '<option value="Animal Products Development Center - Bureau of Animal Industry (APDC - BAI) [1:Point]">Animal Products Development Center - Bureau of Animal Industry (APDC - BAI) [1:Point]</option>';
+            Name_Demo__options_str  += '<option value="Ateneo De Manila University">Ateneo De Manila University</option>';
+            Name_Demo__options_str  += '<option value="Bacnotan District Hospital">Bacnotan District Hospital</option>';
+            Name_Demo__options_str  += '<option value="Bacnotan Public Market">Bacnotan Public Market</option>';
+            Name_Demo__options_str  += '<option value="Bacnotan Septage Treatment Plant">Bacnotan Septage Treatment Plant</option>';
+            Name_Demo__options_str  += '<option value="Bagbag Community">Bagbag Community</option>';
+            Name_Demo__options_str  += '<option value="Balaoan District Hospital">Balaoan District Hospital</option>';
+            Name_Demo__options_str  += '<option value="Balaoan Public Market">Balaoan Public Market</option>';
+            Name_Demo__options_str  += '<option value="Balaoan Slaughterhouse">Balaoan Slaughterhouse</option>';
+            Name_Demo__options_str  += '<option value="Bangar Public Market">Bangar Public Market</option>';
+            Name_Demo__options_str  += '<option value="Bauang Public Market">Bauang Public Market</option>';
+            Name_Demo__options_str  += '<option value="Bauang Slaughterhouse">Bauang Slaughterhouse</option>';
+            Name_Demo__options_str  += '<option value="Bayawan Constructed Wetland Project (Gawad Kalinga-Fishermen&apos;s Village Wastewater Treatment Facility)">Bayawan Constructed Wetland Project (Gawad Kalinga-Fishermen&apos;s Village Wastewater Treatment Facility)</option>';
+            Name_Demo__options_str  += '<option value="Binh Hung Hoa wastewater treatment plant">Binh Hung Hoa wastewater treatment plant</option>';
+            Name_Demo__options_str  += '<option value="Caba Medicare Community Hospital">Caba Medicare Community Hospital</option>';
+            Name_Demo__options_str  += '<option value="Center for Community Transformation - Training and Development Institute Magdalena Campus">Center for Community Transformation - Training and Development Institute Magdalena Campus</option>';
+            Name_Demo__options_str  += '<option value="Cocopeat for wastewater treatment in Can Tho">Cocopeat for wastewater treatment in Can Tho</option>';
+            Name_Demo__options_str  += '<option value="Community-Based System (CBS) for Sitio Laud Baroro">Community-Based System (CBS) for Sitio Laud Baroro</option>';
+            Name_Demo__options_str  += '<option value="Constructed Floating Wetland in Kandy Lake">Constructed Floating Wetland in Kandy Lake</option>';
+            Name_Demo__options_str  += '<option value="Constructed Floating Wetland in Kurunegala Lake">Constructed Floating Wetland in Kurunegala Lake</option>';
+            Name_Demo__options_str  += '<option value="Dumaguete Public Market">Dumaguete Public Market</option>';
+            Name_Demo__options_str  += '<option value="Enhanced removal of nutrients and heavy metals from domestic-industrial wastewater in an academic campus of Hanoi using modified hybrid constructed wetlands">Enhanced removal of nutrients and heavy metals from domestic-industrial wastewater in an academic campus of Hanoi using modified hybrid constructed wetlands</option>';
+            Name_Demo__options_str  += '<option value="Farming Kindergarten project">Farming Kindergarten project</option>';
+            Name_Demo__options_str  += '<option value="GK Village, Brgy. San Roque, Alangalang, Leyte">GK Village, Brgy. San Roque, Alangalang, Leyte</option>';
+            Name_Demo__options_str  += '<option value="General Service Office (Bohol)">General Service Office (Bohol)</option>';
+            Name_Demo__options_str  += '<option value="Green Roof (HCMUT)">Green Roof (HCMUT)</option>';
+            Name_Demo__options_str  += '<option value="Iloilo City Slaughterhouse">Iloilo City Slaughterhouse</option>';
+            Name_Demo__options_str  += '<option value="Iloilo Mission hospital">Iloilo Mission hospital</option>';
+            Name_Demo__options_str  += '<option value="Life Project for Youth (LP4Y) Eco-Village">Life Project for Youth (LP4Y) Eco-Village</option>';
+            Name_Demo__options_str  += '<option value="Manjuyod Public Market">Manjuyod Public Market</option>';
+            Name_Demo__options_str  += '<option value="Nagcarlan Slaughterhouse">Nagcarlan Slaughterhouse</option>';
+            Name_Demo__options_str  += '<option value="Naguilian District Hospital">Naguilian District Hospital</option>';
+            Name_Demo__options_str  += '<option value="Naguilian Septage Treatment Plant">Naguilian Septage Treatment Plant</option>';
+            Name_Demo__options_str  += '<option value="Naguilian Slaughterhouse">Naguilian Slaughterhouse</option>';
+            Name_Demo__options_str  += '<option value="Odour Control by Biofilters - Ratmalana WWTP">Odour Control by Biofilters - Ratmalana WWTP</option>';
+            Name_Demo__options_str  += '<option value="Pabahay sa Riles">Pabahay sa Riles</option>';
+            Name_Demo__options_str  += '<option value="Pagdalagan Plastic Junkshop">Pagdalagan Plastic Junkshop</option>';
+            Name_Demo__options_str  += '<option value="Paringao National High School">Paringao National High School</option>';
+            Name_Demo__options_str  += '<option value="Pelawatta defenceÂ headquarters">Pelawatta defenceÂ headquarters</option>';
+            Name_Demo__options_str  += '<option value="Pollutant removal by Canna generalis in tropical constructed wetlands for domestic wastewater treatment">Pollutant removal by Canna generalis in tropical constructed wetlands for domestic wastewater treatment</option>';
+            Name_Demo__options_str  += '<option value="Ratmalana Tsunami settlement scheme Constructed  Wetland">Ratmalana Tsunami settlement scheme Constructed  Wetland</option>';
+            Name_Demo__options_str  += '<option value="Rooftop Graden (Saigon Tourist Group)">Rooftop Graden (Saigon Tourist Group)</option>';
+            Name_Demo__options_str  += '<option value="Rosario District Hospital">Rosario District Hospital</option>';
+            Name_Demo__options_str  += '<option value="STF of Systematic Septage Treatment Plant Corporation">STF of Systematic Septage Treatment Plant Corporation</option>';
+            Name_Demo__options_str  += '<option value="San Fernando City Hall">San Fernando City Hall</option>';
+            Name_Demo__options_str  += '<option value="San Fernando City Slaughterhouse">San Fernando City Slaughterhouse</option>';
+            Name_Demo__options_str  += '<option value="Sludge Management Strategy - Ratmalana WWTP">Sludge Management Strategy - Ratmalana WWTP</option>';
+            Name_Demo__options_str  += '<option value="Sorsogon Public Market">Sorsogon Public Market</option>';
+            Name_Demo__options_str  += '<option value="Sta. Cruz Slaughterhouse">Sta. Cruz Slaughterhouse</option>';
+            Name_Demo__options_str  += '<option value="Treatment of fishpond water by recirculating horizontal and vertical flow constructed wetlands in the tropics">Treatment of fishpond water by recirculating horizontal and vertical flow constructed wetlands in the tropics</option>';
+            Name_Demo__options_str  += '<option value="Urdaneta City Slaughterhouse">Urdaneta City Slaughterhouse</option>';
+            Name_Demo__options_str  += '<option value="V.R. Abattoir (Antipolo)">V.R. Abattoir (Antipolo)</option>';
+            Name_Demo__options_str  += '<option value="Virac Public Market">Virac Public Market</option>';
+            Name_Demo__options_str  += '<option value="Virac Septage Treatment Plant">Virac Septage Treatment Plant</option>';
+            Name_Demo__options_str  += '<option value="Wastewater quality improvement project at Formosa Ha Tinh company">Wastewater quality improvement project at Formosa Ha Tinh company</option>';
+            sel_Name_Demo_.innerHTML = Name_Demo__options_str;
+            div_Name_Demo_.appendChild(sel_Name_Demo_);
+            var lab_Name_Demo_ = document.createElement('div');
+            lab_Name_Demo_.innerHTML = 'Name_Demo_';
+            lab_Name_Demo_.className = 'filterlabel';
+            div_Name_Demo_.appendChild(lab_Name_Demo_);
+            var reset_Name_Demo_ = document.createElement('div');
+            reset_Name_Demo_.innerHTML = 'clear filter';
+            reset_Name_Demo_.className = 'filterlabel';
+            reset_Name_Demo_.onclick = function() {
+                var options = document.getElementById("sel_Name_Demo_").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Name_Demo_.appendChild(reset_Name_Demo_);
+        resetLabels([layer_Labels_3]);
+        map.on("zoomend", function(){
+            resetLabels([layer_Labels_3]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_Labels_3]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_Labels_3]);
+        });
+        </script>
+    </body>
+</html>
