@@ -27,7 +27,6 @@
         </div>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
-        <script src="js/leaflet-svg-shape-markers.min.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
         <script src="js/leaflet-hash.js"></script>
@@ -41,8 +40,8 @@
 <script src="js/nouislider.min.js"></script>
 <script src="js/wNumb.js"></script>
         <script src="data/Countries_2.js"></script>
-        <script src="data/Labels_3.js"></script>
-        <script src="data/ExistingNbSProjects_4.js"></script>
+        <script src="data/ExistingNbSProjects_3.js"></script>
+        <script src="data/Labels_4.js"></script>
         <script>
         var highlightLayer;
         function highlightFeature(e) {
@@ -61,7 +60,7 @@
         }
         var map = L.map('map', {
             zoomControl:true, maxZoom:10, minZoom:1
-        }).fitBounds([[-1.642090032440552,65.03067224870296],[30.299138339955068,135.23897449518623]]);
+        }).fitBounds([[-2.527644287088805,76.72688029300123],[24.567295798518213,132.2485831530532]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -121,6 +120,9 @@
                         <td colspan="2">' + (feature.properties['iso3'] !== null ? autolinker.link(feature.properties['iso3'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
+                        <td colspan="2">' + (feature.properties['status'] !== null ? autolinker.link(feature.properties['status'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
                         <td colspan="2">' + (feature.properties['color_code'] !== null ? autolinker.link(feature.properties['color_code'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
@@ -134,6 +136,9 @@
                     </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['iso_3166_1'] !== null ? autolinker.link(feature.properties['iso_3166_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['french_sho'] !== null ? autolinker.link(feature.properties['french_sho'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
@@ -166,60 +171,7 @@
         });
         bounds_group.addLayer(layer_Countries_2);
         map.addLayer(layer_Countries_2);
-        function pop_Labels_3(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                },
-                mouseover: highlightFeature,
-            });
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Type'] !== null ? autolinker.link(feature.properties['Type'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
-
-        function style_Labels_3_0() {
-            return {
-                pane: 'pane_Labels_3',
-                radius: 0.4,
-                opacity: 1,
-                color: 'rgba(255,230,0,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1.0,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(255,255,255,1.0)',
-                interactive: false,
-            }
-        }
-        map.createPane('pane_Labels_3');
-        map.getPane('pane_Labels_3').style.zIndex = 403;
-        map.getPane('pane_Labels_3').style['mix-blend-mode'] = 'normal';
-        var layer_Labels_3 = new L.geoJson(json_Labels_3, {
-            attribution: '',
-            interactive: false,
-            dataVar: 'json_Labels_3',
-            layerName: 'layer_Labels_3',
-            pane: 'pane_Labels_3',
-            onEachFeature: pop_Labels_3,
-            pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.shapeMarker(latlng, style_Labels_3_0(feature));
-            },
-        });
-        bounds_group.addLayer(layer_Labels_3);
-        map.addLayer(layer_Labels_3);
-        function pop_ExistingNbSProjects_4(feature, layer) {
+        function pop_ExistingNbSProjects_3(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     for (i in e.target._eventParents) {
@@ -285,13 +237,16 @@
                     <tr>\
                         <td colspan="2">' + (feature.properties['gx_media_l'] !== null ? autolinker.link(feature.properties['gx_media_l'].toLocaleString()) : '') + '</td>\
                     </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Code_Name'] !== null ? autolinker.link(feature.properties['Code_Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_ExistingNbSProjects_4_0() {
+        function style_ExistingNbSProjects_3_0() {
             return {
-                pane: 'pane_ExistingNbSProjects_4',
+                pane: 'pane_ExistingNbSProjects_3',
                 radius: 6.0,
                 opacity: 1,
                 color: 'rgba(255,230,0,1.0)',
@@ -305,26 +260,77 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_ExistingNbSProjects_4');
-        map.getPane('pane_ExistingNbSProjects_4').style.zIndex = 404;
-        map.getPane('pane_ExistingNbSProjects_4').style['mix-blend-mode'] = 'normal';
-        var layer_ExistingNbSProjects_4 = new L.geoJson(json_ExistingNbSProjects_4, {
+        map.createPane('pane_ExistingNbSProjects_3');
+        map.getPane('pane_ExistingNbSProjects_3').style.zIndex = 403;
+        map.getPane('pane_ExistingNbSProjects_3').style['mix-blend-mode'] = 'normal';
+        var layer_ExistingNbSProjects_3 = new L.geoJson(json_ExistingNbSProjects_3, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_ExistingNbSProjects_4',
-            layerName: 'layer_ExistingNbSProjects_4',
-            pane: 'pane_ExistingNbSProjects_4',
-            onEachFeature: pop_ExistingNbSProjects_4,
+            dataVar: 'json_ExistingNbSProjects_3',
+            layerName: 'layer_ExistingNbSProjects_3',
+            pane: 'pane_ExistingNbSProjects_3',
+            onEachFeature: pop_ExistingNbSProjects_3,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_ExistingNbSProjects_4_0(feature));
+                return L.circleMarker(latlng, style_ExistingNbSProjects_3_0(feature));
             },
         });
-        bounds_group.addLayer(layer_ExistingNbSProjects_4);
-        map.addLayer(layer_ExistingNbSProjects_4);
+        bounds_group.addLayer(layer_ExistingNbSProjects_3);
+        map.addLayer(layer_ExistingNbSProjects_3);
+        function pop_Labels_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Type'] !== null ? autolinker.link(feature.properties['Type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Code_Name'] !== null ? autolinker.link(feature.properties['Code_Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Labels_4_0() {
+            return {
+                pane: 'pane_Labels_4',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,40,40,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Labels_4');
+        map.getPane('pane_Labels_4').style.zIndex = 404;
+        map.getPane('pane_Labels_4').style['mix-blend-mode'] = 'normal';
+        var layer_Labels_4 = new L.geoJson(json_Labels_4, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Labels_4',
+            layerName: 'layer_Labels_4',
+            pane: 'pane_Labels_4',
+            onEachFeature: pop_Labels_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Labels_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Labels_4);
+        map.addLayer(layer_Labels_4);
             var title = new L.Control();
             title.onAdd = function (map) {
                 this._div = L.DomUtil.create('div', 'info');
@@ -367,15 +373,15 @@
         document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
         .title += 'Search for a place';
         var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/ExistingNbSProjects_4.png" /> Existing NbS Projects': layer_ExistingNbSProjects_4,'<img src="legend/Labels_3.png" /> Labels': layer_Labels_3,'<img src="legend/Countries_2.png" /> Countries': layer_Countries_2,"Google Satellite": layer_GoogleSatellite_1,"Google Hybrid": layer_GoogleHybrid_0,}).addTo(map);
+        L.control.layers(baseMaps,{'<img src="legend/Labels_4.png" /> Labels': layer_Labels_4,'<img src="legend/ExistingNbSProjects_3.png" /> Existing NbS Projects': layer_ExistingNbSProjects_3,'<img src="legend/Countries_2.png" /> Countries': layer_Countries_2,"Google Satellite": layer_GoogleSatellite_1,"Google Hybrid": layer_GoogleHybrid_0,}).addTo(map);
         setBounds();
         var i = 0;
-        layer_Labels_3.eachLayer(function(layer) {
+        layer_Labels_4.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['Type'] !== null?String('<div style="color: #ffffff; font-size: 10pt; font-family: \'Calibri\', sans-serif;">' + layer.feature.properties['Type']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Labels_3'});
+            layer.bindTooltip((layer.feature.properties['Type'] !== null?String('<div style="color: #ffffff; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['Type']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Labels_4'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -401,7 +407,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"Type": "str","Status": "str","Name_Demo_": "str"};
+        var Filters = {"Code_Name": "str","Type": "str","Status": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -489,12 +495,12 @@
           this[lyr["options"]["layerName"]].clearLayers();
           this[lyr["options"]["layerName"]].addData(features);
         var i = 0;
-        layer_Labels_3.eachLayer(function(layer) {
+        layer_Labels_4.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['Type'] !== null?String('<div style="color: #ffffff; font-size: 10pt; font-family: \'Calibri\', sans-serif;">' + layer.feature.properties['Type']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Labels_3'});
+            layer.bindTooltip((layer.feature.properties['Type'] !== null?String('<div style="color: #ffffff; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['Type']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Labels_4'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -504,6 +510,92 @@
           }
           })
         }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Code_Name = document.createElement('div');
+            div_Code_Name.id = "div_Code_Name";
+            div_Code_Name.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Code_Name);
+            sel_Code_Name = document.createElement('select');
+            sel_Code_Name.multiple = true;
+            sel_Code_Name.size = 10;
+            sel_Code_Name.id = "sel_Code_Name";
+            var Code_Name_options_str = "<option value='' unselected></option>";
+            sel_Code_Name.onchange = function(){filterFunc()};
+            Code_Name_options_str  += '<option value="LK_01 Constructed Floating Wetland in Kandy Lake">LK_01 Constructed Floating Wetland in Kandy Lake</option>';
+            Code_Name_options_str  += '<option value="LK_02 Constructed Floating Wetland in Kurunegala Lake">LK_02 Constructed Floating Wetland in Kurunegala Lake</option>';
+            Code_Name_options_str  += '<option value="LK_03 Pelawatta defenceÂ headquarters">LK_03 Pelawatta defenceÂ headquarters</option>';
+            Code_Name_options_str  += '<option value="LK_04 Ratmalana Tsunami settlement scheme Constructed  Wetland">LK_04 Ratmalana Tsunami settlement scheme Constructed  Wetland</option>';
+            Code_Name_options_str  += '<option value="LK_05 Odour Control by Biofilters - Ratmalana WWTP">LK_05 Odour Control by Biofilters - Ratmalana WWTP</option>';
+            Code_Name_options_str  += '<option value="LK_06 Sludge Management Strategy - Ratmalana WWTP">LK_06 Sludge Management Strategy - Ratmalana WWTP</option>';
+            Code_Name_options_str  += '<option value="PH_01 Bayawan Constructed Wetland Project (Gawad Kalinga-Fishermen&apos;s Village Wastewater Treatment Facility)">PH_01 Bayawan Constructed Wetland Project (Gawad Kalinga-Fishermen&apos;s Village Wastewater Treatment Facility)</option>';
+            Code_Name_options_str  += '<option value="PH_02 Life Project for Youth (LP4Y) Eco-Village">PH_02 Life Project for Youth (LP4Y) Eco-Village</option>';
+            Code_Name_options_str  += '<option value="PH_03 Animal Products Development Center - Bureau of Animal Industry (APDC - BAI) [1:Point]">PH_03 Animal Products Development Center - Bureau of Animal Industry (APDC - BAI) [1:Point]</option>';
+            Code_Name_options_str  += '<option value="PH_04 Iloilo City Slaughterhouse">PH_04 Iloilo City Slaughterhouse</option>';
+            Code_Name_options_str  += '<option value="PH_05 Iloilo Mission hospital">PH_05 Iloilo Mission hospital</option>';
+            Code_Name_options_str  += '<option value="PH_06 Dumaguete Public Market">PH_06 Dumaguete Public Market</option>';
+            Code_Name_options_str  += '<option value="PH_07 Sta. Cruz Slaughterhouse">PH_07 Sta. Cruz Slaughterhouse</option>';
+            Code_Name_options_str  += '<option value="PH_08 Nagcarlan Slaughterhouse">PH_08 Nagcarlan Slaughterhouse</option>';
+            Code_Name_options_str  += '<option value="PH_09 General Service Office (Bohol)">PH_09 General Service Office (Bohol)</option>';
+            Code_Name_options_str  += '<option value="PH_10 Manjuyod Public Market">PH_10 Manjuyod Public Market</option>';
+            Code_Name_options_str  += '<option value="PH_11 Sorsogon Public Market">PH_11 Sorsogon Public Market</option>';
+            Code_Name_options_str  += '<option value="PH_12 V.R. Abattoir (Antipolo)">PH_12 V.R. Abattoir (Antipolo)</option>';
+            Code_Name_options_str  += '<option value="PH_13 Naguilian District Hospital">PH_13 Naguilian District Hospital</option>';
+            Code_Name_options_str  += '<option value="PH_14 Pabahay sa Riles">PH_14 Pabahay sa Riles</option>';
+            Code_Name_options_str  += '<option value="PH_15 Bauang Slaughterhouse">PH_15 Bauang Slaughterhouse</option>';
+            Code_Name_options_str  += '<option value="PH_16 Bacnotan District Hospital">PH_16 Bacnotan District Hospital</option>';
+            Code_Name_options_str  += '<option value="PH_17 Bauang Public Market">PH_17 Bauang Public Market</option>';
+            Code_Name_options_str  += '<option value="PH_18 Naguilian Slaughterhouse">PH_18 Naguilian Slaughterhouse</option>';
+            Code_Name_options_str  += '<option value="PH_19 Bacnotan Public Market">PH_19 Bacnotan Public Market</option>';
+            Code_Name_options_str  += '<option value="PH_20 AVP Dressing Plant">PH_20 AVP Dressing Plant</option>';
+            Code_Name_options_str  += '<option value="PH_21 Pagdalagan Plastic Junkshop">PH_21 Pagdalagan Plastic Junkshop</option>';
+            Code_Name_options_str  += '<option value="PH_22 Ateneo De Manila University">PH_22 Ateneo De Manila University</option>';
+            Code_Name_options_str  += '<option value="PH_23 San Fernando City Slaughterhouse">PH_23 San Fernando City Slaughterhouse</option>';
+            Code_Name_options_str  += '<option value="PH_24 Balaoan Public Market">PH_24 Balaoan Public Market</option>';
+            Code_Name_options_str  += '<option value="PH_25 Center for Community Transformation - Training and Development Institute Magdalena Campus">PH_25 Center for Community Transformation - Training and Development Institute Magdalena Campus</option>';
+            Code_Name_options_str  += '<option value="PH_26 Bangar Public Market">PH_26 Bangar Public Market</option>';
+            Code_Name_options_str  += '<option value="PH_27 Balaoan District Hospital">PH_27 Balaoan District Hospital</option>';
+            Code_Name_options_str  += '<option value="PH_28 GK Village, Brgy. San Roque, Alangalang, Leyte">PH_28 GK Village, Brgy. San Roque, Alangalang, Leyte</option>';
+            Code_Name_options_str  += '<option value="PH_29 Rosario District Hospital">PH_29 Rosario District Hospital</option>';
+            Code_Name_options_str  += '<option value="PH_30 Bagbag Community">PH_30 Bagbag Community</option>';
+            Code_Name_options_str  += '<option value="PH_31 Caba Medicare Community Hospital">PH_31 Caba Medicare Community Hospital</option>';
+            Code_Name_options_str  += '<option value="PH_32 Agoo Municipality Slaughterhouse">PH_32 Agoo Municipality Slaughterhouse</option>';
+            Code_Name_options_str  += '<option value="PH_33 Paringao National High School">PH_33 Paringao National High School</option>';
+            Code_Name_options_str  += '<option value="PH_34 Balaoan Slaughterhouse">PH_34 Balaoan Slaughterhouse</option>';
+            Code_Name_options_str  += '<option value="PH_35 San Fernando City Hall">PH_35 San Fernando City Hall</option>';
+            Code_Name_options_str  += '<option value="PH_36 STF of Systematic Septage Treatment Plant Corporation">PH_36 STF of Systematic Septage Treatment Plant Corporation</option>';
+            Code_Name_options_str  += '<option value="PH_37 Virac Public Market">PH_37 Virac Public Market</option>';
+            Code_Name_options_str  += '<option value="PH_38 Virac Septage Treatment Plant">PH_38 Virac Septage Treatment Plant</option>';
+            Code_Name_options_str  += '<option value="PH_39 Community-Based System (CBS) for Sitio Laud Baroro">PH_39 Community-Based System (CBS) for Sitio Laud Baroro</option>';
+            Code_Name_options_str  += '<option value="PH_40 Urdaneta City Slaughterhouse">PH_40 Urdaneta City Slaughterhouse</option>';
+            Code_Name_options_str  += '<option value="PH_41 Bacnotan Septage Treatment Plant">PH_41 Bacnotan Septage Treatment Plant</option>';
+            Code_Name_options_str  += '<option value="PH_42 Naguilian Septage Treatment Plant">PH_42 Naguilian Septage Treatment Plant</option>';
+            Code_Name_options_str  += '<option value="VN_01 Wastewater quality improvement project at Formosa Ha Tinh company">VN_01 Wastewater quality improvement project at Formosa Ha Tinh company</option>';
+            Code_Name_options_str  += '<option value="VN_02 Farming Kindergarten project">VN_02 Farming Kindergarten project</option>';
+            Code_Name_options_str  += '<option value="VN_03 Pollutant removal by Canna generalis in tropical constructed wetlands for domestic wastewater treatment">VN_03 Pollutant removal by Canna generalis in tropical constructed wetlands for domestic wastewater treatment</option>';
+            Code_Name_options_str  += '<option value="VN_04 Treatment of fishpond water by recirculating horizontal and vertical flow constructed wetlands in the tropics">VN_04 Treatment of fishpond water by recirculating horizontal and vertical flow constructed wetlands in the tropics</option>';
+            Code_Name_options_str  += '<option value="VN_05 Cocopeat for wastewater treatment in Can Tho">VN_05 Cocopeat for wastewater treatment in Can Tho</option>';
+            Code_Name_options_str  += '<option value="VN_06 Enhanced removal of nutrients and heavy metals from domestic-industrial wastewater in an academic campus of Hanoi using modified hybrid constructed wetlands">VN_06 Enhanced removal of nutrients and heavy metals from domestic-industrial wastewater in an academic campus of Hanoi using modified hybrid constructed wetlands</option>';
+            Code_Name_options_str  += '<option value="VN_07 Binh Hung Hoa wastewater treatment plant">VN_07 Binh Hung Hoa wastewater treatment plant</option>';
+            Code_Name_options_str  += '<option value="VN_08 Green Roof (HCMUT)">VN_08 Green Roof (HCMUT)</option>';
+            Code_Name_options_str  += '<option value="VN_09 Rooftop Graden (Saigon Tourist Group)">VN_09 Rooftop Graden (Saigon Tourist Group)</option>';
+            sel_Code_Name.innerHTML = Code_Name_options_str;
+            div_Code_Name.appendChild(sel_Code_Name);
+            var lab_Code_Name = document.createElement('div');
+            lab_Code_Name.innerHTML = 'Code_Name';
+            lab_Code_Name.className = 'filterlabel';
+            div_Code_Name.appendChild(lab_Code_Name);
+            var reset_Code_Name = document.createElement('div');
+            reset_Code_Name.innerHTML = 'clear filter';
+            reset_Code_Name.className = 'filterlabel';
+            reset_Code_Name.onclick = function() {
+                var options = document.getElementById("sel_Code_Name").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Code_Name.appendChild(reset_Code_Name);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
             var div_Type = document.createElement('div');
@@ -549,11 +641,10 @@
             document.getElementById("menu").appendChild(div_Status);
             sel_Status = document.createElement('select');
             sel_Status.multiple = true;
-            sel_Status.size = 8;
+            sel_Status.size = 7;
             sel_Status.id = "sel_Status";
             var Status_options_str = "<option value='' unselected></option>";
             sel_Status.onchange = function(){filterFunc()};
-            Status_options_str  += '<option value="ND">ND</option>';
             Status_options_str  += '<option value="No data">No data</option>';
             Status_options_str  += '<option value="Non-functional">Non-functional</option>';
             Status_options_str  += '<option value="Not fully operational">Not fully operational</option>';
@@ -578,101 +669,15 @@
                 filterFunc();
             };
             div_Status.appendChild(reset_Status);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_Name_Demo_ = document.createElement('div');
-            div_Name_Demo_.id = "div_Name_Demo_";
-            div_Name_Demo_.className= "filterselect";
-            document.getElementById("menu").appendChild(div_Name_Demo_);
-            sel_Name_Demo_ = document.createElement('select');
-            sel_Name_Demo_.multiple = true;
-            sel_Name_Demo_.size = 10;
-            sel_Name_Demo_.id = "sel_Name_Demo_";
-            var Name_Demo__options_str = "<option value='' unselected></option>";
-            sel_Name_Demo_.onchange = function(){filterFunc()};
-            Name_Demo__options_str  += '<option value="AVP Dressing Plant">AVP Dressing Plant</option>';
-            Name_Demo__options_str  += '<option value="Agoo Municipality Slaughterhouse">Agoo Municipality Slaughterhouse</option>';
-            Name_Demo__options_str  += '<option value="Animal Products Development Center - Bureau of Animal Industry (APDC - BAI) [1:Point]">Animal Products Development Center - Bureau of Animal Industry (APDC - BAI) [1:Point]</option>';
-            Name_Demo__options_str  += '<option value="Ateneo De Manila University">Ateneo De Manila University</option>';
-            Name_Demo__options_str  += '<option value="Bacnotan District Hospital">Bacnotan District Hospital</option>';
-            Name_Demo__options_str  += '<option value="Bacnotan Public Market">Bacnotan Public Market</option>';
-            Name_Demo__options_str  += '<option value="Bacnotan Septage Treatment Plant">Bacnotan Septage Treatment Plant</option>';
-            Name_Demo__options_str  += '<option value="Bagbag Community">Bagbag Community</option>';
-            Name_Demo__options_str  += '<option value="Balaoan District Hospital">Balaoan District Hospital</option>';
-            Name_Demo__options_str  += '<option value="Balaoan Public Market">Balaoan Public Market</option>';
-            Name_Demo__options_str  += '<option value="Balaoan Slaughterhouse">Balaoan Slaughterhouse</option>';
-            Name_Demo__options_str  += '<option value="Bangar Public Market">Bangar Public Market</option>';
-            Name_Demo__options_str  += '<option value="Bauang Public Market">Bauang Public Market</option>';
-            Name_Demo__options_str  += '<option value="Bauang Slaughterhouse">Bauang Slaughterhouse</option>';
-            Name_Demo__options_str  += '<option value="Bayawan Constructed Wetland Project (Gawad Kalinga-Fishermen&apos;s Village Wastewater Treatment Facility)">Bayawan Constructed Wetland Project (Gawad Kalinga-Fishermen&apos;s Village Wastewater Treatment Facility)</option>';
-            Name_Demo__options_str  += '<option value="Binh Hung Hoa wastewater treatment plant">Binh Hung Hoa wastewater treatment plant</option>';
-            Name_Demo__options_str  += '<option value="Caba Medicare Community Hospital">Caba Medicare Community Hospital</option>';
-            Name_Demo__options_str  += '<option value="Center for Community Transformation - Training and Development Institute Magdalena Campus">Center for Community Transformation - Training and Development Institute Magdalena Campus</option>';
-            Name_Demo__options_str  += '<option value="Cocopeat for wastewater treatment in Can Tho">Cocopeat for wastewater treatment in Can Tho</option>';
-            Name_Demo__options_str  += '<option value="Community-Based System (CBS) for Sitio Laud Baroro">Community-Based System (CBS) for Sitio Laud Baroro</option>';
-            Name_Demo__options_str  += '<option value="Constructed Floating Wetland in Kandy Lake">Constructed Floating Wetland in Kandy Lake</option>';
-            Name_Demo__options_str  += '<option value="Constructed Floating Wetland in Kurunegala Lake">Constructed Floating Wetland in Kurunegala Lake</option>';
-            Name_Demo__options_str  += '<option value="Dumaguete Public Market">Dumaguete Public Market</option>';
-            Name_Demo__options_str  += '<option value="Enhanced removal of nutrients and heavy metals from domestic-industrial wastewater in an academic campus of Hanoi using modified hybrid constructed wetlands">Enhanced removal of nutrients and heavy metals from domestic-industrial wastewater in an academic campus of Hanoi using modified hybrid constructed wetlands</option>';
-            Name_Demo__options_str  += '<option value="Farming Kindergarten project">Farming Kindergarten project</option>';
-            Name_Demo__options_str  += '<option value="GK Village, Brgy. San Roque, Alangalang, Leyte">GK Village, Brgy. San Roque, Alangalang, Leyte</option>';
-            Name_Demo__options_str  += '<option value="General Service Office (Bohol)">General Service Office (Bohol)</option>';
-            Name_Demo__options_str  += '<option value="Green Roof (HCMUT)">Green Roof (HCMUT)</option>';
-            Name_Demo__options_str  += '<option value="Iloilo City Slaughterhouse">Iloilo City Slaughterhouse</option>';
-            Name_Demo__options_str  += '<option value="Iloilo Mission hospital">Iloilo Mission hospital</option>';
-            Name_Demo__options_str  += '<option value="Life Project for Youth (LP4Y) Eco-Village">Life Project for Youth (LP4Y) Eco-Village</option>';
-            Name_Demo__options_str  += '<option value="Manjuyod Public Market">Manjuyod Public Market</option>';
-            Name_Demo__options_str  += '<option value="Nagcarlan Slaughterhouse">Nagcarlan Slaughterhouse</option>';
-            Name_Demo__options_str  += '<option value="Naguilian District Hospital">Naguilian District Hospital</option>';
-            Name_Demo__options_str  += '<option value="Naguilian Septage Treatment Plant">Naguilian Septage Treatment Plant</option>';
-            Name_Demo__options_str  += '<option value="Naguilian Slaughterhouse">Naguilian Slaughterhouse</option>';
-            Name_Demo__options_str  += '<option value="Odour Control by Biofilters - Ratmalana WWTP">Odour Control by Biofilters - Ratmalana WWTP</option>';
-            Name_Demo__options_str  += '<option value="Pabahay sa Riles">Pabahay sa Riles</option>';
-            Name_Demo__options_str  += '<option value="Pagdalagan Plastic Junkshop">Pagdalagan Plastic Junkshop</option>';
-            Name_Demo__options_str  += '<option value="Paringao National High School">Paringao National High School</option>';
-            Name_Demo__options_str  += '<option value="Pelawatta defenceÂ headquarters">Pelawatta defenceÂ headquarters</option>';
-            Name_Demo__options_str  += '<option value="Pollutant removal by Canna generalis in tropical constructed wetlands for domestic wastewater treatment">Pollutant removal by Canna generalis in tropical constructed wetlands for domestic wastewater treatment</option>';
-            Name_Demo__options_str  += '<option value="Ratmalana Tsunami settlement scheme Constructed  Wetland">Ratmalana Tsunami settlement scheme Constructed  Wetland</option>';
-            Name_Demo__options_str  += '<option value="Rooftop Graden (Saigon Tourist Group)">Rooftop Graden (Saigon Tourist Group)</option>';
-            Name_Demo__options_str  += '<option value="Rosario District Hospital">Rosario District Hospital</option>';
-            Name_Demo__options_str  += '<option value="STF of Systematic Septage Treatment Plant Corporation">STF of Systematic Septage Treatment Plant Corporation</option>';
-            Name_Demo__options_str  += '<option value="San Fernando City Hall">San Fernando City Hall</option>';
-            Name_Demo__options_str  += '<option value="San Fernando City Slaughterhouse">San Fernando City Slaughterhouse</option>';
-            Name_Demo__options_str  += '<option value="Sludge Management Strategy - Ratmalana WWTP">Sludge Management Strategy - Ratmalana WWTP</option>';
-            Name_Demo__options_str  += '<option value="Sorsogon Public Market">Sorsogon Public Market</option>';
-            Name_Demo__options_str  += '<option value="Sta. Cruz Slaughterhouse">Sta. Cruz Slaughterhouse</option>';
-            Name_Demo__options_str  += '<option value="Treatment of fishpond water by recirculating horizontal and vertical flow constructed wetlands in the tropics">Treatment of fishpond water by recirculating horizontal and vertical flow constructed wetlands in the tropics</option>';
-            Name_Demo__options_str  += '<option value="Urdaneta City Slaughterhouse">Urdaneta City Slaughterhouse</option>';
-            Name_Demo__options_str  += '<option value="V.R. Abattoir (Antipolo)">V.R. Abattoir (Antipolo)</option>';
-            Name_Demo__options_str  += '<option value="Virac Public Market">Virac Public Market</option>';
-            Name_Demo__options_str  += '<option value="Virac Septage Treatment Plant">Virac Septage Treatment Plant</option>';
-            Name_Demo__options_str  += '<option value="Wastewater quality improvement project at Formosa Ha Tinh company">Wastewater quality improvement project at Formosa Ha Tinh company</option>';
-            sel_Name_Demo_.innerHTML = Name_Demo__options_str;
-            div_Name_Demo_.appendChild(sel_Name_Demo_);
-            var lab_Name_Demo_ = document.createElement('div');
-            lab_Name_Demo_.innerHTML = 'Name_Demo_';
-            lab_Name_Demo_.className = 'filterlabel';
-            div_Name_Demo_.appendChild(lab_Name_Demo_);
-            var reset_Name_Demo_ = document.createElement('div');
-            reset_Name_Demo_.innerHTML = 'clear filter';
-            reset_Name_Demo_.className = 'filterlabel';
-            reset_Name_Demo_.onclick = function() {
-                var options = document.getElementById("sel_Name_Demo_").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_Name_Demo_.appendChild(reset_Name_Demo_);
-        resetLabels([layer_Labels_3]);
+        resetLabels([layer_ExistingNbSProjects_3,layer_Labels_4]);
         map.on("zoomend", function(){
-            resetLabels([layer_Labels_3]);
+            resetLabels([layer_ExistingNbSProjects_3,layer_Labels_4]);
         });
         map.on("layeradd", function(){
-            resetLabels([layer_Labels_3]);
+            resetLabels([layer_ExistingNbSProjects_3,layer_Labels_4]);
         });
         map.on("layerremove", function(){
-            resetLabels([layer_Labels_3]);
+            resetLabels([layer_ExistingNbSProjects_3,layer_Labels_4]);
         });
         </script>
     </body>
