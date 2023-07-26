@@ -60,7 +60,7 @@
         }
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[-3.6970783334694373,71.69958219894919],[29.879007470260884,134.02429513016455]]);
+        }).fitBounds([[-4.425458418267586,75.74482990486962],[29.24486552281757,138.06954283608496]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -525,7 +525,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"Code_Name": "str","Type": "str","Status": "str","Country": "str"};
+        var Filters = {"Country": "str","Code_Name": "str","Status": "str","Type": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -630,6 +630,38 @@
         }
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
+            var div_Country = document.createElement('div');
+            div_Country.id = "div_Country";
+            div_Country.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Country);
+            sel_Country = document.createElement('select');
+            sel_Country.multiple = true;
+            sel_Country.size = 3;
+            sel_Country.id = "sel_Country";
+            var Country_options_str = "<option value='' unselected></option>";
+            sel_Country.onchange = function(){filterFunc()};
+            Country_options_str  += '<option value="Philippines">Philippines</option>';
+            Country_options_str  += '<option value="Sri Lanka">Sri Lanka</option>';
+            Country_options_str  += '<option value="Vietnam">Vietnam</option>';
+            sel_Country.innerHTML = Country_options_str;
+            div_Country.appendChild(sel_Country);
+            var lab_Country = document.createElement('div');
+            lab_Country.innerHTML = 'Country';
+            lab_Country.className = 'filterlabel';
+            div_Country.appendChild(lab_Country);
+            var reset_Country = document.createElement('div');
+            reset_Country.innerHTML = 'clear filter';
+            reset_Country.className = 'filterlabel';
+            reset_Country.onclick = function() {
+                var options = document.getElementById("sel_Country").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Country.appendChild(reset_Country);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
             var div_Code_Name = document.createElement('div');
             div_Code_Name.id = "div_Code_Name";
             div_Code_Name.className= "filterselect";
@@ -716,44 +748,6 @@
             div_Code_Name.appendChild(reset_Code_Name);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
-            var div_Type = document.createElement('div');
-            div_Type.id = "div_Type";
-            div_Type.className= "filterselect";
-            document.getElementById("menu").appendChild(div_Type);
-            sel_Type = document.createElement('select');
-            sel_Type.multiple = true;
-            sel_Type.size = 9;
-            sel_Type.id = "sel_Type";
-            var Type_options_str = "<option value='' unselected></option>";
-            sel_Type.onchange = function(){filterFunc()};
-            Type_options_str  += '<option value="Constructed Floating Wetland">Constructed Floating Wetland</option>';
-            Type_options_str  += '<option value="Constructed wetland">Constructed wetland</option>';
-            Type_options_str  += '<option value="DEWATS">DEWATS</option>';
-            Type_options_str  += '<option value="Dewats">Dewats</option>';
-            Type_options_str  += '<option value="Green Roof">Green Roof</option>';
-            Type_options_str  += '<option value="Maturation pond">Maturation pond</option>';
-            Type_options_str  += '<option value="Odour Control by Biofilters">Odour Control by Biofilters</option>';
-            Type_options_str  += '<option value="Septage Treatment Facility">Septage Treatment Facility</option>';
-            Type_options_str  += '<option value="Sludge Management Strategy">Sludge Management Strategy</option>';
-            sel_Type.innerHTML = Type_options_str;
-            div_Type.appendChild(sel_Type);
-            var lab_Type = document.createElement('div');
-            lab_Type.innerHTML = 'Type';
-            lab_Type.className = 'filterlabel';
-            div_Type.appendChild(lab_Type);
-            var reset_Type = document.createElement('div');
-            reset_Type.innerHTML = 'clear filter';
-            reset_Type.className = 'filterlabel';
-            reset_Type.onclick = function() {
-                var options = document.getElementById("sel_Type").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_Type.appendChild(reset_Type);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
             var div_Status = document.createElement('div');
             div_Status.id = "div_Status";
             div_Status.className= "filterselect";
@@ -790,36 +784,42 @@
             div_Status.appendChild(reset_Status);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
-            var div_Country = document.createElement('div');
-            div_Country.id = "div_Country";
-            div_Country.className= "filterselect";
-            document.getElementById("menu").appendChild(div_Country);
-            sel_Country = document.createElement('select');
-            sel_Country.multiple = true;
-            sel_Country.size = 3;
-            sel_Country.id = "sel_Country";
-            var Country_options_str = "<option value='' unselected></option>";
-            sel_Country.onchange = function(){filterFunc()};
-            Country_options_str  += '<option value="Philippines">Philippines</option>';
-            Country_options_str  += '<option value="Sri Lanka">Sri Lanka</option>';
-            Country_options_str  += '<option value="Vietnam">Vietnam</option>';
-            sel_Country.innerHTML = Country_options_str;
-            div_Country.appendChild(sel_Country);
-            var lab_Country = document.createElement('div');
-            lab_Country.innerHTML = 'Country';
-            lab_Country.className = 'filterlabel';
-            div_Country.appendChild(lab_Country);
-            var reset_Country = document.createElement('div');
-            reset_Country.innerHTML = 'clear filter';
-            reset_Country.className = 'filterlabel';
-            reset_Country.onclick = function() {
-                var options = document.getElementById("sel_Country").options;
+            var div_Type = document.createElement('div');
+            div_Type.id = "div_Type";
+            div_Type.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Type);
+            sel_Type = document.createElement('select');
+            sel_Type.multiple = true;
+            sel_Type.size = 9;
+            sel_Type.id = "sel_Type";
+            var Type_options_str = "<option value='' unselected></option>";
+            sel_Type.onchange = function(){filterFunc()};
+            Type_options_str  += '<option value="Constructed Floating Wetland">Constructed Floating Wetland</option>';
+            Type_options_str  += '<option value="Constructed wetland">Constructed wetland</option>';
+            Type_options_str  += '<option value="DEWATS">DEWATS</option>';
+            Type_options_str  += '<option value="Dewats">Dewats</option>';
+            Type_options_str  += '<option value="Green Roof">Green Roof</option>';
+            Type_options_str  += '<option value="Maturation pond">Maturation pond</option>';
+            Type_options_str  += '<option value="Odour Control by Biofilters">Odour Control by Biofilters</option>';
+            Type_options_str  += '<option value="Septage Treatment Facility">Septage Treatment Facility</option>';
+            Type_options_str  += '<option value="Sludge Management Strategy">Sludge Management Strategy</option>';
+            sel_Type.innerHTML = Type_options_str;
+            div_Type.appendChild(sel_Type);
+            var lab_Type = document.createElement('div');
+            lab_Type.innerHTML = 'Type';
+            lab_Type.className = 'filterlabel';
+            div_Type.appendChild(lab_Type);
+            var reset_Type = document.createElement('div');
+            reset_Type.innerHTML = 'clear filter';
+            reset_Type.className = 'filterlabel';
+            reset_Type.onclick = function() {
+                var options = document.getElementById("sel_Type").options;
                 for (var i=0; i < options.length; i++) {
                     options[i].selected = false;
                 }
                 filterFunc();
             };
-            div_Country.appendChild(reset_Country);
+            div_Type.appendChild(reset_Type);
         resetLabels([layer_ExistingNbSProjects_3,layer_Labels_4]);
         map.on("zoomend", function(){
             resetLabels([layer_ExistingNbSProjects_3,layer_Labels_4]);
