@@ -59,8 +59,8 @@
             }
         }
         var map = L.map('map', {
-            zoomControl:true, maxZoom:10, minZoom:1
-        }).fitBounds([[-2.527644287088805,76.72688029300123],[24.567295798518213,132.2485831530532]]);
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[-3.6970783334694373,71.69958219894919],[29.879007470260884,134.02429513016455]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -80,19 +80,18 @@
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
         }
-        map.createPane('pane_GoogleHybrid_0');
-        map.getPane('pane_GoogleHybrid_0').style.zIndex = 400;
-        var layer_GoogleHybrid_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
-            pane: 'pane_GoogleHybrid_0',
+        map.createPane('pane_GoogleRoad_0');
+        map.getPane('pane_GoogleRoad_0').style.zIndex = 400;
+        var layer_GoogleRoad_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleRoad_0',
             opacity: 1.0,
             attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
             minZoom: 1,
-            maxZoom: 10,
+            maxZoom: 28,
             minNativeZoom: 0,
             maxNativeZoom: 20
         });
-        layer_GoogleHybrid_0;
-        map.addLayer(layer_GoogleHybrid_0);
+        layer_GoogleRoad_0;
         map.createPane('pane_GoogleSatellite_1');
         map.getPane('pane_GoogleSatellite_1').style.zIndex = 401;
         var layer_GoogleSatellite_1 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
@@ -100,7 +99,7 @@
             opacity: 1.0,
             attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
             minZoom: 1,
-            maxZoom: 10,
+            maxZoom: 28,
             minNativeZoom: 0,
             maxNativeZoom: 20
         });
@@ -152,7 +151,7 @@
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 1.0,
+                weight: 2.0,
                 fillOpacity: 0,
                 interactive: false,
             }
@@ -244,8 +243,42 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_ExistingNbSProjects_3_0() {
-            return {
+        function style_ExistingNbSProjects_3_0(feature) {
+            switch(String(feature.properties['Type'])) {
+                case 'Constructed Floating Wetland':
+                    return {
+                pane: 'pane_ExistingNbSProjects_3',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(255,230,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,40,40,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Constructed wetland':
+                    return {
+                pane: 'pane_ExistingNbSProjects_3',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(255,230,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(71,17,246,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Dewats':
+                    return {
                 pane: 'pane_ExistingNbSProjects_3',
                 radius: 6.0,
                 opacity: 1,
@@ -258,6 +291,88 @@
                 fillOpacity: 1,
                 fillColor: 'rgba(255,255,16,1.0)',
                 interactive: true,
+            }
+                    break;
+                case 'Green Roof':
+                    return {
+                pane: 'pane_ExistingNbSProjects_3',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(255,230,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(74,246,71,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Maturation pond':
+                    return {
+                pane: 'pane_ExistingNbSProjects_3',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(255,230,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,127,0,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Odour Control by Biofilters':
+                    return {
+                pane: 'pane_ExistingNbSProjects_3',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(255,230,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(51,160,44,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Septage Treatment Facility':
+                    return {
+                pane: 'pane_ExistingNbSProjects_3',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(255,230,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(166,86,40,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Sludge Management Strategy':
+                    return {
+                pane: 'pane_ExistingNbSProjects_3',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(255,230,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,20,191,1.0)',
+                interactive: true,
+            }
+                    break;
             }
         }
         map.createPane('pane_ExistingNbSProjects_3');
@@ -296,6 +411,9 @@
                     <tr>\
                         <td colspan="2">' + (feature.properties['Code_Name'] !== null ? autolinker.link(feature.properties['Code_Name'].toLocaleString()) : '') + '</td>\
                     </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['No.'] !== null ? autolinker.link(feature.properties['No.'].toLocaleString()) : '') + '</td>\
+                    </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
@@ -303,11 +421,11 @@
         function style_Labels_4_0() {
             return {
                 pane: 'pane_Labels_4',
-                radius: 4.0,
+                radius: 0.0,
                 stroke: false,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(255,40,40,1.0)',
+                fillColor: 'rgba(255,255,255,0.0)',
                 interactive: false,
             }
         }
@@ -359,7 +477,7 @@
                 abstract.show = function () {
                     this._div.classList.remove("abstract");
                     this._div.classList.add("abstractUncollapsed");
-                    this._div.innerHTML = 'This map is discussed in the (proposed) book entitled "Water treatment in urban environments: A guide for the implementation and scaling of nature-based solutions - Examples from South/Southeast Asia" under Chapter 2: Mapping existing NbS for water treatment in the Philippines, Sri Lanka and Vietnam.';
+                    this._div.innerHTML = '֍This is the map of the existing NbS projects in the Philippines, Sri Lanka and Vietnam. <br />֍Click on any of the points to display more information on the NbS project. <br />֍Use the layer list to turn on/off the layers. <br />֍Use filters to display projects based on specific characteristics. <br />֍Before using the filters, first turn off the layer – Labels. ';
             };
             abstract.addTo(map);
         var osmGeocoder = new L.Control.Geocoder({
@@ -373,7 +491,7 @@
         document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
         .title += 'Search for a place';
         var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/Labels_4.png" /> Labels': layer_Labels_4,'<img src="legend/ExistingNbSProjects_3.png" /> Existing NbS Projects': layer_ExistingNbSProjects_3,'<img src="legend/Countries_2.png" /> Countries': layer_Countries_2,"Google Satellite": layer_GoogleSatellite_1,"Google Hybrid": layer_GoogleHybrid_0,}).addTo(map);
+        L.control.layers(baseMaps,{'<img src="legend/Labels_4.png" /> Labels': layer_Labels_4,'Existing NbS Projects<br /><table><tr><td style="text-align: center;"><img src="legend/ExistingNbSProjects_3_ConstructedFloatingWetland0.png" /></td><td>Constructed Floating Wetland</td></tr><tr><td style="text-align: center;"><img src="legend/ExistingNbSProjects_3_Constructedwetland1.png" /></td><td>Constructed wetland</td></tr><tr><td style="text-align: center;"><img src="legend/ExistingNbSProjects_3_Dewats2.png" /></td><td>Dewats</td></tr><tr><td style="text-align: center;"><img src="legend/ExistingNbSProjects_3_GreenRoof3.png" /></td><td>Green Roof</td></tr><tr><td style="text-align: center;"><img src="legend/ExistingNbSProjects_3_Maturationpond4.png" /></td><td>Maturation pond</td></tr><tr><td style="text-align: center;"><img src="legend/ExistingNbSProjects_3_OdourControlbyBiofilters5.png" /></td><td>Odour Control by Biofilters</td></tr><tr><td style="text-align: center;"><img src="legend/ExistingNbSProjects_3_SeptageTreatmentFacility6.png" /></td><td>Septage Treatment Facility</td></tr><tr><td style="text-align: center;"><img src="legend/ExistingNbSProjects_3_SludgeManagementStrategy7.png" /></td><td>Sludge Management Strategy</td></tr></table>': layer_ExistingNbSProjects_3,'<img src="legend/Countries_2.png" /> Countries': layer_Countries_2,"Google Satellite": layer_GoogleSatellite_1,"Google Road": layer_GoogleRoad_0,}).addTo(map);
         setBounds();
         var i = 0;
         layer_Labels_4.eachLayer(function(layer) {
@@ -381,7 +499,7 @@
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['Type'] !== null?String('<div style="color: #ffffff; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['Type']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Labels_4'});
+            layer.bindTooltip((layer.feature.properties['Type'] !== null?String('<div style="color: #f7fbff; font-size: 10pt; font-family: \'TechnicBold\', sans-serif;">' + layer.feature.properties['Type']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Labels_4'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -407,7 +525,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"Code_Name": "str","Type": "str","Status": "str"};
+        var Filters = {"Code_Name": "str","Type": "str","Status": "str","Country": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -500,7 +618,7 @@
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['Type'] !== null?String('<div style="color: #ffffff; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['Type']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Labels_4'});
+            layer.bindTooltip((layer.feature.properties['Type'] !== null?String('<div style="color: #f7fbff; font-size: 10pt; font-family: \'TechnicBold\', sans-serif;">' + layer.feature.properties['Type']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Labels_4'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -604,13 +722,14 @@
             document.getElementById("menu").appendChild(div_Type);
             sel_Type = document.createElement('select');
             sel_Type.multiple = true;
-            sel_Type.size = 8;
+            sel_Type.size = 9;
             sel_Type.id = "sel_Type";
             var Type_options_str = "<option value='' unselected></option>";
             sel_Type.onchange = function(){filterFunc()};
             Type_options_str  += '<option value="Constructed Floating Wetland">Constructed Floating Wetland</option>';
             Type_options_str  += '<option value="Constructed wetland">Constructed wetland</option>';
             Type_options_str  += '<option value="DEWATS">DEWATS</option>';
+            Type_options_str  += '<option value="Dewats">Dewats</option>';
             Type_options_str  += '<option value="Green Roof">Green Roof</option>';
             Type_options_str  += '<option value="Maturation pond">Maturation pond</option>';
             Type_options_str  += '<option value="Odour Control by Biofilters">Odour Control by Biofilters</option>';
@@ -669,6 +788,38 @@
                 filterFunc();
             };
             div_Status.appendChild(reset_Status);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Country = document.createElement('div');
+            div_Country.id = "div_Country";
+            div_Country.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Country);
+            sel_Country = document.createElement('select');
+            sel_Country.multiple = true;
+            sel_Country.size = 3;
+            sel_Country.id = "sel_Country";
+            var Country_options_str = "<option value='' unselected></option>";
+            sel_Country.onchange = function(){filterFunc()};
+            Country_options_str  += '<option value="Philippines">Philippines</option>';
+            Country_options_str  += '<option value="Sri Lanka">Sri Lanka</option>';
+            Country_options_str  += '<option value="Vietnam">Vietnam</option>';
+            sel_Country.innerHTML = Country_options_str;
+            div_Country.appendChild(sel_Country);
+            var lab_Country = document.createElement('div');
+            lab_Country.innerHTML = 'Country';
+            lab_Country.className = 'filterlabel';
+            div_Country.appendChild(lab_Country);
+            var reset_Country = document.createElement('div');
+            reset_Country.innerHTML = 'clear filter';
+            reset_Country.className = 'filterlabel';
+            reset_Country.onclick = function() {
+                var options = document.getElementById("sel_Country").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Country.appendChild(reset_Country);
         resetLabels([layer_ExistingNbSProjects_3,layer_Labels_4]);
         map.on("zoomend", function(){
             resetLabels([layer_ExistingNbSProjects_3,layer_Labels_4]);
